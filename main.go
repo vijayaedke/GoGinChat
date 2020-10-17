@@ -16,6 +16,8 @@ limitations under the License.
 package main
 
 import (
+	"os"
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -26,6 +28,7 @@ func main() {
 		Long: `A smaple app to test the implementaion in Golang using tools such as GraphQL`,
 	}
 	if err:= cmd.Execute(); err!=nil{
-		panic(err)
+		fmt.Println("Error executing command", err)
+		os.Exit(1)
 	}
 }

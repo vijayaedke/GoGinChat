@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"flag"
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -24,15 +27,24 @@ import (
 // userCmd represents the user command
 var userCmd = &cobra.Command{
 	Use:   "user",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Command to add new user to db",
+	Long: `Command to add new user to db using a bash script`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("user called")
+		fmt.Println("add user to db")
+		flag.String("username", "user", "Add username in DB")
+		flag.String("email", "emai", "Add email to DB")
+		flag.Parse()
+
+		if _, err := os.Stat("addUser.sh"); os.IsNotExist(err){
+			panic(err)
+		}else{
+			output, err := exec.Command("/bin/sh", "$GOPATH/GoGinChat/addUser.sh").Output()
+			if err!=nil {
+				panic(err)
+			}else{
+				fmt.Printf("User added %s", output)
+			}
+		}
 	},
 }
 
