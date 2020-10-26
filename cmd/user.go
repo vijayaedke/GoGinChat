@@ -21,7 +21,11 @@ import (
 	"os"
 	"os/exec"
 
+	"GoGinChat/config"
+	"GoGinChat/models"
+
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // userCmd represents the user command
@@ -42,6 +46,20 @@ var userCmd = &cobra.Command{
 			if err!=nil {
 				panic(err)
 			}else{
+				if err:= config.ReadConfig(); err!=nil{
+					panic(err)
+				}
+				fmt.Println("Read config successful for DB")
+				var dbConn models.DBConnection
+				viper.SetDefault("database.dbname", "goeat")
+				err := viper.Unmarshal(&dbConn)
+				if err!=nil{
+					fmt.Println("Error unmarshaling the config")
+					panic(err)
+				}
+
+				//Adding bash script for default user add in DB
+
 				fmt.Printf("User added %s", output)
 			}
 		}
