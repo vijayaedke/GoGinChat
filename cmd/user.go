@@ -18,6 +18,7 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 
@@ -59,8 +60,12 @@ var userCmd = &cobra.Command{
 				}
 
 				//Adding bash script for default user add in DB
-
-				fmt.Printf("User added %s", output)
+				cmd, err := exec.Command("/bin/sh", "$GOPATH/cmd/addUser.sh").Output()
+				if err!=nil {
+					log.Fatal(err)
+					panic(err)
+				}
+				fmt.Printf("User added %s : %s", cmd, output)
 			}
 		}
 	},
